@@ -1,0 +1,23 @@
+name: Compose Lab 10
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+      - name: Extract source
+        run: unzip -q lab10-source.zip -d project
+      - name: Verify Compose stack
+        working-directory: project
+        run: bash scripts/verify.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compose-lab10-evidence
+          path: project/evidence/
